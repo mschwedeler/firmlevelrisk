@@ -1,0 +1,2 @@
+# info
+This file is the result of applying the tf*idf score on all bigrams from the political and non-political text. The political text consists of political newspaper articles (100 per month between July 2005 and June 2020) and an undergraduate textbook on politics; the non-political text is defined similarly. See Hassan et al. (2020) for more details.
