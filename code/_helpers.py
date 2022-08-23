@@ -59,6 +59,8 @@ def load_transcripts(folder):
     
     # Loop through all files
     for file in files:
+
+        print('Working on', file)
         
         # Load HTML
         with open(folder + file, 'r', encoding='utf-8') as infile:
@@ -71,7 +73,11 @@ def load_transcripts(folder):
             soup = BeautifulSoup(webpage, 'html.parser')
 
         # Narrow down to relevant content
-        content = soup.select('[class~=article-content]')[0]
+        try:
+            content = soup.select('[class~=article-content]')[0]
+        except IndexError:
+            # To support current version of the Motley Fool website
+            content = soup.select('[class~=tailwind-article-body]')[0]
         title = clean_title(soup.title.get_text())
         
         # Extract text
@@ -83,7 +89,11 @@ def load_transcripts(folder):
             if 'date' in exists:
                 date = part.find(id='date').get_text()
                 time = part.find(id='time').get_text()
-                ticker = part.find(class_='ticker').get_text()
+                try:
+                    ticker = part.find(class_='ticker').get_text()
+                except AttributeError:
+                    # To support current version of the Motley Fool website
+                    ticker = part.find(class_='ticker-symbol').get_text()
                 continue
             
             # Skip links
